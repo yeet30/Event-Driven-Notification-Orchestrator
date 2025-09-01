@@ -1,27 +1,35 @@
 {
-  "name": "template",
-  "version": "1.0.0",
-  "main": "src/index.ts",
-  "scripts": {
-    "build": "tsc",
-    "start": "node .build/index.js",
-    "dev": "nodemon src/index.ts",
-    "format": "prettier --write \"./**/(*.tsx|*.ts|*.jsx|*.js|*.css|*.json)\""
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": "",
-  "devDependencies": {
-    "@types/express": "^5.0.3",
-    "@types/node": "^24.3.0",
-    "nodemon": "^3.1.10",
-    "prettier": "3.6.2",
-    "ts-node": "^10.9.2",
-    "typescript": "^5.9.2"
-  },
-  "dependencies": {
-    "express": "^5.1.0",
-    "zod": "^4.1.5"
-  }
+    "name": "template",
+    "version": "1.0.0",
+    "main": "src/index.ts",
+    "scripts": {
+        "build": "tsc",
+        "start": "node .build/index.js",
+        "dev": "nodemon src/index.ts",
+        "format": "prettier --write \"./**/(*.tsx|*.ts|*.jsx|*.js|*.css|*.json)\"",
+        "test": "jest"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "description": "",
+    "devDependencies": {
+        "@types/express": "^5.0.3",
+        "@types/jest": "^30.0.0",
+        "@types/node": "^24.3.0",
+        "jest": "^30.1.2",
+        "nodemon": "^3.1.10",
+        "prettier": "3.6.2",
+        "ts-jest": "^29.4.1",
+        "ts-node": "^10.9.2",
+        "typescript": "^5.9.2"
+    },
+    "dependencies": {
+        "express": "^5.1.0",
+        "zod": "^4.1.5"
+    },
+    "prettier": {
+        "tabWidth": 4,
+        "useTabs": false
+    }
 }
