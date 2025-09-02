@@ -1,13 +1,12 @@
-export function parseTimeToMinutes(time: string): number {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.parseTimeToMinutes = parseTimeToMinutes;
+exports.isWithinDnd = isWithinDnd;
+function parseTimeToMinutes(time) {
     const [hoursStr, minutesStr] = time.split(/[:.]/);
     return parseInt(hoursStr, 10) * 60 + parseInt(minutesStr, 10);
 }
-
-export function isWithinDnd(
-    notificationTimeMinutes: number,
-    dndStartMinutes: number,
-    dndEndMinutes: number,
-): boolean {
+function isWithinDnd(notificationTimeMinutes, dndStartMinutes, dndEndMinutes) {
     if (dndStartMinutes > dndEndMinutes) {
         //if the starting time is bigger than the ending time, it means the ending time is in the next day
         if (

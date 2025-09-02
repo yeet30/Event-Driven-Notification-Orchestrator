@@ -1,23 +1,22 @@
-import { Express } from "express";
-import { users, EventSchema, Event, addRequestLog, getRequestLogs  } from "../storage";
-import { isWithinDnd, parseTimeToMinutes } from "../utils";
-
-export const eventsControllerFactory = (app: Express) => {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.eventsControllerFactory = void 0;
+const users_1 = require("../users");
+const utils_1 = require("../utils");
+const eventsControllerFactory = (app) => {
     app.post("/events", (req, res) => {
-        addRequestLog(req.method, req.url, req.body);
-
         console.log("Received event:", req.body);
         if (req.body.timestamp)
             req.body.timestamp = new Date(req.body.timestamp);
-        const parseResult = EventSchema.safeParse(req.body);
+        const parseResult = users_1.EventSchema.safeParse(req.body);
         if (!parseResult.success) {
             return res.status(400).send({
                 error: "Invalid event parameters.",
                 details: parseResult.error.issues,
             });
         }
-        const newEvent: Event = parseResult.data;
-        const userPreferences = users.get(newEvent.userId);
+        const newEvent = parseResult.data;
+        const userPreferences = users_1.users.get(newEvent.userId);
         if (!userPreferences)
             return res.status(404).send({ error: "User not found." });
         const eventSetting = userPreferences.eventSettings[newEvent.eventType];
@@ -28,7 +27,7 @@ export const eventsControllerFactory = (app: Express) => {
             });
         } else {
             let isDndActive = false;
-            const notificationTimeMinutes = parseTimeToMinutes(
+            const notificationTimeMinutes = (0, utils_1.parseTimeToMinutes)(
                 newEvent.timestamp.getUTCHours().toString().padStart(2, "0") +
                     ":" +
                     newEvent.timestamp
@@ -37,13 +36,14 @@ export const eventsControllerFactory = (app: Express) => {
                         .padStart(2, "0"),
             );
             console.log(newEvent.timestamp.getHours());
-            const dndStartMinutes = parseTimeToMinutes(
+            const dndStartMinutes = (0, utils_1.parseTimeToMinutes)(
                 userPreferences.dnd.start,
             );
-            const dndEndMinutes = parseTimeToMinutes(userPreferences.dnd.end);
-
+            const dndEndMinutes = (0, utils_1.parseTimeToMinutes)(
+                userPreferences.dnd.end,
+            );
             if (
-                isWithinDnd(
+                (0, utils_1.isWithinDnd)(
                     notificationTimeMinutes,
                     dndStartMinutes,
                     dndEndMinutes,
@@ -57,8 +57,5 @@ export const eventsControllerFactory = (app: Express) => {
         }
         res.status(202).send({ decision: "PROCESS_NOTIFICATION" });
     });
-
-    app.get("/logs", (req, res) => {
-        res.status(200).send(getRequestLogs());
-    });
 };
+exports.eventsControllerFactory = eventsControllerFactory;

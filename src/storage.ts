@@ -28,7 +28,29 @@ export const EventSchema = z.object({
     timestamp: z.date(),
 });
 
+export interface RequestLog {
+    timestamp: Date;
+    method: string;
+    url: string;
+    body: any;
+}
+
+export function addRequestLog(method: string, url: string, body: any) {
+    requestLogs.push({
+        timestamp: new Date(),
+        method,
+        url,
+        body,
+    });
+}
+
+export function getRequestLogs(): RequestLog[] {
+    return requestLogs;
+}
+
+
 export type UserPreferences = z.infer<typeof UserPreferencesSchema>;
 export type Event = z.infer<typeof EventSchema>;
 
+export const requestLogs : RequestLog[] = [];
 export const users = new Map<string, UserPreferences>();
