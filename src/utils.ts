@@ -8,23 +8,23 @@ export function isWithinDnd(
     dndStartMinutes: number,
     dndEndMinutes: number,
 ): boolean {
-    let isDndActive = false;
     if (dndStartMinutes > dndEndMinutes) {
         //if the starting time is bigger than the ending time, it means the ending time is in the next day
         if (
             notificationTimeMinutes >= dndStartMinutes &&
             notificationTimeMinutes <= 24 * 60
         )
-            isDndActive = true;
+            return true;
         else if (
             notificationTimeMinutes >= 0 &&
-            notificationTimeMinutes <= dndEndMinutes
+            notificationTimeMinutes < dndEndMinutes
         )
-            isDndActive = true;
-        else
-            isDndActive =
-                notificationTimeMinutes >= dndStartMinutes &&
-                notificationTimeMinutes <= dndEndMinutes;
+            return true;
     }
-    return isDndActive;
+    else if(
+        notificationTimeMinutes >= dndStartMinutes && 
+        notificationTimeMinutes < dndEndMinutes
+    )    
+        return true
+    return false
 }
