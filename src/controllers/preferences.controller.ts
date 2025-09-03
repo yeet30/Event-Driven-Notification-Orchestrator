@@ -8,19 +8,28 @@ export const preferencesControllerFactory = (app: Express) => {
     });
 
     app.get("/preferences/:userId", (req, res) => {
-        addRequestLog(req.method, req.url, req.body);
-        
-        console.log(`Preferences for user ${req.params.userId} requested`);
-        const userId = req.params.userId;
-        const requestedPreference = users.get(userId);
+        try {
+            addRequestLog(req.method, req.url, req.body);
 
-        if (!requestedPreference)
-            return res.status(404).send({ error: "User not found." });
-        res.status(200).send(requestedPreference);
+            console.log(`Preferences for user ${req.params.userId} requested`);
+            const userId = req.params.userId;
+            const requestedPreference = users.get(userId);
+
+            if (!requestedPreference)
+                return res.status(404).send({ error: "User not found." });
+            res.status(200).send(requestedPreference);
+        } catch (err) {
+            console.error("Unexpected server error:", err);
+            res.status(500).send({
+                error: "Oops! Something unexpected happened.",
+            });
+        }        
     });
 
     app.post("/preferences/:userId", (req, res) => {
-        addRequestLog(req.method, req.url, req.body);
+
+        try {
+            addRequestLog(req.method, req.url, req.body);
 
         const userId = req.params.userId;
         console.log(
@@ -46,5 +55,11 @@ export const preferencesControllerFactory = (app: Express) => {
             message: `The user with id ${userId} has been updated with the following parameters`,
             newPreference,
         });
+        } catch (err) {
+            console.error("Unexpected server error:", err);
+            res.status(500).send({
+                error: "Oops! Something unexpected happened.",
+            });
+        }
     });
 };
